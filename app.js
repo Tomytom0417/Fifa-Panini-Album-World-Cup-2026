@@ -2,15 +2,6 @@ let monInventaire = JSON.parse(localStorage.getItem('inventairePanini26')) || {}
 let carteEnAttente = null;
 let carteAmiEnAttente = null;
 
-
-<select id="filtre-continent" onchange="afficherInventaire()">
-    <option value="Tous">Tous les continents</option>
-    <option value="Europe">Europe</option>
-    <option value="Amérique">Amérique</option>
-    <option value="Afrique">Afrique</option>
-    <option value="Asie">Asie</option>
-</select>
-
 // Initialisation au chargement
 window.onload = () => {
     genererFiltresEquipes();
