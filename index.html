@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panini Tracker 2026</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>⚽ Panini 2026</h1>
+    </header>
+
+    <nav>
+        <button id="btn-ouverture" class="actif" onclick="changerOnglet('ouverture')">Ouverture</button>
+        <button id="btn-inventaire" onclick="changerOnglet('inventaire')">Inventaire & Stats</button>
+        <button id="btn-echanges" onclick="changerOnglet('echanges')">Échanges</button>
+    </nav>
+
+    <main>
+        <section id="ouverture" class="actif">
+            <h2>Nouvelles cartes</h2>
+            <p>Entre le code :</p>
+            <input type="text" id="code-ouverture" placeholder="Ex: MEX12">
+            <button class="action" onclick="traiterOuverture()">Vérifier</button>
+            <div id="message-ouverture"></div>
+            <div id="zone-confirmation" style="display: none; margin-top: 15px; padding: 15px; border: 2px solid #003366; background: #e6f2ff; border-radius: 8px;">
+                <p id="details-carte"></p>
+                <div style="display: flex; gap: 10px;">
+                    <button class="action" onclick="confirmerAjout()">✅ Valider</button>
+                    <button class="action" style="background: #d9534f;" onclick="annulerAjout()">❌ Annuler</button>
+                </div>
+            </div>
+        </section>
+
+<!-- SECTION 2 : INVENTAIRE ET STATISTIQUES -->
+        <section id="inventaire">
+            <h2>Statistiques</h2>
+            <div id="zone-stats" class="stats-box"></div>
+
+            <h2>Mon Classeur</h2>
+            <div class="filtres-box">
+                <select id="filtre-equipe" onchange="afficherInventaire()">
+                    <option value="Toutes">Toutes les équipes</option>
+                </select>
+
+                <select id="filtre-type" onchange="afficherInventaire()">
+                    <option value="toutes">Toutes les cartes</option>
+                    <option value="manquantes">Cartes manquantes</option>
+                    <option value="possedees">Cartes possédées (1 et +)</option>
+                    <option value="doubles">Mes doubles (2 et +)</option>
+                </select>
+
+                <div class="toggles">
+                    <label><input type="checkbox" id="opt-nom" checked onchange="afficherInventaire()"> Nom</label>
+                    <label><input type="checkbox" id="opt-equipe" checked onchange="afficherInventaire()"> Équipe</label>
+                    <label><input type="checkbox" id="opt-page" checked onchange="afficherInventaire()"> Page</label>
+                </div>
+            </div>
+
+            <div id="liste-inventaire"></div>
+
+            <!-- BLOC SAUVEGARDE ET RESTAURATION -->
+            <div class="echange-box" style="border-color: #003366; margin-top: 40px;">
+                <h3>💾 Sauvegarde & Restauration</h3>
+                <p style="font-size: 13px; color: #555; margin-top: -5px;">Génère un code pour copier ta collection sur un autre téléphone, ou colle un ancien code pour la restaurer.</p>
+                <textarea id="code-sauvegarde" rows="2" style="width: 100%; box-sizing: border-box; font-family: monospace; font-size: 11px; margin-bottom: 10px; resize: none;" placeholder="Le code de ta collection s'affichera ici..."></textarea>
+                <div style="display: flex; gap: 10px;">
+                    <button onclick="exporterCollection()" style="flex: 1; padding: 8px; background-color: #003366; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">📤 Générer le code</button>
+                    <button onclick="importerCollection()" style="flex: 1; padding: 8px; background-color: #28a745; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">📥 Importer un code</button>
+                </div>
+                <div id="message-sauvegarde" style="margin-top: 10px; font-weight: bold; font-size: 14px; text-align: center;"></div>
+            </div>
+        </section>
+
+        <!-- SECTION 3 : ÉCHANGES -->
+        <section id="echanges">
+            <h2>Nouvel Échange</h2>
+            <div class="echange-box">
+                <h3>1. Carte proposée par mon ami</h3>
+                <input type="text" id="code-ami" placeholder="Ex: FRA 10">
+                <button class="action" onclick="verifierCarteAmi()">Vérifier cette carte</button>
+                <div id="resultat-ami" style="margin-top: 10px; font-weight: bold;"></div>
+            </div>
+
+            <div class="echange-box" id="zone-don" style="display: none;">
+                <h3>2. Carte que je lui donne</h3>
+                
+                <!-- Zone des filtres de tri et recherche -->
+                <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; background: #f0f4f8; padding: 12px; border-radius: 6px; border: 1px solid #ccd7e3;">
+                    <input type="text" id="recherche-don-code" placeholder="🔍 Recherche rapide (Ex: BEL 12)" oninput="filtrerEtTrierMesDoubles()" style="width: 100%; box-sizing: border-box; padding: 8px;">
+                    
+                    <div style="display: flex; gap: 8px;">
+                        <select id="filtre-don-equipe" onchange="filtrerEtTrierMesDoubles()" style="flex: 1; padding: 8px; border-radius: 4px;">
+                            <!-- Rempli automatiquement en JS -->
+                        </select>
+                        <select id="tri-don" onchange="filtrerEtTrierMesDoubles()" style="flex: 1; padding: 8px; border-radius: 4px;">
+                            <option value="album">📘 Ordre de l'album</option>
+                            <option value="quantite">🔥 Plus gros stock de doubles</option>
+                        </select>
+                    </div>
+                </div>
+
+                <p>Choisis la carte à échanger :</p>
+                <!-- On force une taille (size="5") pour transformer le menu en liste scannable -->
+                <select id="select-mes-doubles" size="5" style="width: 100%; padding: 5px; font-family: monospace; border-radius: 4px; border: 1px solid #ccc;"></select>
+                
+                <button class="action" style="margin-top: 15px;" onclick="validerEchange()">🤝 Valider l'échange</button>
+            </div>
+            <div id="message-echange"></div>
+        </section>
+    </main>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+
+</body>
+</html>
