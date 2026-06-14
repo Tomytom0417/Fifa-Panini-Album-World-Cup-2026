@@ -13,7 +13,7 @@ body {
 
 header {
     background-color: #121212; /* Bleu foncé style foot */
-    color: white;
+    color: black;
     text-align: center;
     padding: 15px 0;
 }
@@ -28,7 +28,7 @@ nav {
 nav button {
     padding: 10px 15px;
     border: none;
-    background-color: white;
+    background-color: black;
     border-radius: 25px;
     font-weight: bold;
     cursor: pointer;
@@ -36,7 +36,7 @@ nav button {
 
 nav button.actif {
     background-color: #121212;
-    color: white;
+    color: black;
 }
 
 section {
@@ -63,7 +63,7 @@ button.action {
     padding: 12px;
     font-size: 16px;
     background-color: #28a745;
-    color: white;
+    color: black;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -76,7 +76,7 @@ button.action {
 }
 
 .carte-item {
-    background: white;
+    background: black;
     padding: 10px;
     margin-bottom: 5px;
     border-radius: 5px;
@@ -128,7 +128,7 @@ button.action {
 
 .controles-qte button {
     background-color: #003366;
-    color: white;
+    color: black;
     border: none;
     border-radius: 50%;
     width: 25px;
@@ -143,7 +143,7 @@ button.action {
 }
 
 .echange-box {
-    background: white;
+    background: black;
     padding: 15px;
     border-radius: 8px;
     margin-bottom: 15px;
